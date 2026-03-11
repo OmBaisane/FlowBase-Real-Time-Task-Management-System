@@ -1,0 +1,13 @@
+<h3>Add Task</h3>
+
+<input [(ngModel)]="title" placeholder="Task title" class="w-full p-2 border mb-2" />
+
+<select [(ngModel)]="status" class="w-full p-2 border mb-2">
+  <option value="pending">Pending</option>
+
+  <option value="in-progress">In Progress</option>
+
+  <option value="completed">Completed</option>
+</select>
+
+<button (click)="addTask()" class="bg-blue-500 text-white px-4 py-2">Add Task</button>

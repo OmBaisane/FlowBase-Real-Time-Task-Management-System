@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 50">
+
+  <!-- background box -->
+  <rect x="0" y="5" width="40" height="40" rx="8" fill="#2563eb"/>
+
+  <!-- flow arrow -->
+  <path d="M10 25 L20 15 L30 25 L20 35 Z" fill="white"/>
+
+  <!-- text -->
+  <text x="55" y="32"
+        font-family="Arial, Helvetica, sans-serif"
+        font-size="22"
+        font-weight="bold"
+        fill="#1e293b">
+    FlowBase
+  </text>
+
+</svg>

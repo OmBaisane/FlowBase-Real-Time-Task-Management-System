@@ -1,0 +1,15 @@
+<li *ngFor="let task of tasks">
+  <h3>{{ task.title }}</h3>
+
+  <p>{{ task.description }}</p>
+
+  <span class="status">{{ task.status }}</span>
+
+  <span class="priority">{{ task.priority }}</span>
+
+  <br /><br />
+
+  <button (click)="delete(task._id)">Delete</button>
+
+  <hr />
+</li>
