@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 import { TaskService } from '../../services/task.service';
 import { UserService } from '../../services/user.service';
 import { AuthService } from '../../services/auth.service';
-import { SocketService } from '../../services/socket.service';
 
 @Component({
   selector: 'app-task-form',
@@ -30,13 +29,10 @@ export class TaskFormComponent implements OnInit {
     private taskService: TaskService,
     private userService: UserService,
     private authService: AuthService,
-    private socketService: SocketService
   ) {}
 
   ngOnInit() {
     this.isAdmin = this.authService.isAdmin();
-    // Ensure socket is connected when form is active
-    this.socketService.connect();
     if (this.isAdmin) {
       this.userService.getUsers().subscribe({
         next: (u) => (this.users = u),

@@ -23,6 +23,11 @@ import { TaskService } from '../../services/task.service';
   templateUrl: './admin-dashboard.component.html',
 })
 export class AdminDashboardComponent implements OnInit, OnDestroy {
+  /**
+   * Incrementing this tells <app-task-list> to reload.
+   * It is only used for the "form created a task" path; socket events
+   * are handled inside TaskListComponent directly.
+   */
   refreshTasks = 0;
 
   stats = { total: 0, todo: 0, inProgress: 0, completed: 0 };
@@ -36,11 +41,16 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     private taskService: TaskService,
   ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
+    // Start the socket connection once. Idempotent — safe to call even if
+    // another component already called it.
     this.socketService.connect();
+
+    // Fetch dashboard stats immediately on load.
     this.loadStats();
 
-    // Refresh stats on real-time events
+    // Keep the chart in sync with real-time events.
+    // TaskListComponent handles its own task array independently.
     this.subs.push(
       this.socketService.taskCreated$.subscribe(() => this.loadStats()),
       this.socketService.taskUpdated$.subscribe(() => this.loadStats()),
@@ -48,12 +58,15 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     );
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
+    // Only unsubscribe from our own subscriptions.
+    // DO NOT call socketService.disconnect() here — the socket is a
+    // providedIn:'root' singleton shared across the whole app. Disconnecting
+    // on page navigation would kill real-time updates for other components.
     this.subs.forEach((s) => s.unsubscribe());
-    this.socketService.disconnect();
   }
 
-  loadStats() {
+  loadStats(): void {
     this.taskService.getStats().subscribe({
       next: (s) => (this.stats = s),
     });
@@ -63,8 +76,11 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     return [this.stats.todo, this.stats.inProgress, this.stats.completed];
   }
 
-  onTaskCreated() {
+  /** Called by <app-task-form> after a successful POST. */
+  onTaskCreated(): void {
+    // The socket event (taskCreated) will drive the task list reload and
+    // loadStats() automatically. We only bump refreshTasks as a fallback
+    // for cases where the socket event arrives before the component is ready.
     this.refreshTasks++;
-    this.loadStats();
   }
 }

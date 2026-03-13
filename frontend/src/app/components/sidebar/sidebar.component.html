@@ -1,4 +1,4 @@
-<aside class="w-56 min-h-screen flex flex-col flex-shrink-0
+<aside class="w-56 min-h-screen flex flex-col shrink-0
               bg-slate-900 dark:bg-[#0b0f1a]
               border-r border-slate-800/60 dark:border-slate-800/40">
 
@@ -15,7 +15,7 @@
         [routerLinkActiveOptions]="{exact: false}"
         class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium
                text-slate-400 hover:text-white hover:bg-slate-800/80 transition-all duration-150">
-        <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg class="w-4 h-4 flex shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
             d="M4 5a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM14 5a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 15a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1v-4zM14 15a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z"/>
         </svg>
@@ -27,7 +27,7 @@
         routerLinkActive="!bg-blue-600 !text-white shadow-md shadow-blue-600/25"
         class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium
                text-slate-400 hover:text-white hover:bg-slate-800/80 transition-all duration-150">
-        <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg class="w-4 h-4 flex shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
             d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
         </svg>
@@ -46,7 +46,7 @@
           routerLinkActive="!bg-blue-600 !text-white shadow-md shadow-blue-600/25"
           class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium
                  text-slate-400 hover:text-white hover:bg-slate-800/80 transition-all duration-150">
-          <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="w-4 h-4 flex shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
               d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
@@ -60,8 +60,8 @@
   <!-- User Footer -->
   <div class="px-3 pb-4 border-t border-slate-800/60 pt-3">
     <div class="flex items-center gap-2.5 px-2.5 py-2 rounded-xl bg-slate-800/60 mb-1.5">
-      <div class="w-7 h-7 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600
-                  flex items-center justify-center text-white text-[11px] font-bold flex-shrink-0 select-none">
+      <div class="w-7 h-7 rounded-full bg-linear-to-br from-blue-500 to-indigo-600
+                  flex items-center justify-center text-white text-[11px] font-bold shrink-0 select-none">
         {{ user?.name?.charAt(0)?.toUpperCase() }}
       </div>
       <div class="min-w-0 flex-1">

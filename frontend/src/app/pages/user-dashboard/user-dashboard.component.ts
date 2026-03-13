@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Subscription } from 'rxjs';
+import { Subscription } from 'rxjs'
 import { HeaderComponent } from '../../components/header/header.component';
 import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 import { TaskListComponent } from '../../components/task-list/task-list.component';
@@ -31,11 +31,16 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
     private authService: AuthService,
   ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.user = this.authService.getUser();
+
+    // Start socket — idempotent singleton, safe to call multiple times.
     this.socketService.connect();
+
+    // Fetch stats immediately on load — do not wait for a UI interaction.
     this.loadStats();
 
+    // Keep chart in sync with real-time events.
     this.subs.push(
       this.socketService.taskCreated$.subscribe(() => this.loadStats()),
       this.socketService.taskUpdated$.subscribe(() => this.loadStats()),
@@ -43,12 +48,13 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
     );
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
+    // Unsubscribe our own listeners only.
+    // Do NOT disconnect the socket — it is a singleton service.
     this.subs.forEach((s) => s.unsubscribe());
-    this.socketService.disconnect();
   }
 
-  loadStats() {
+  loadStats(): void {
     this.taskService.getStats().subscribe({
       next: (s) => (this.stats = s),
     });
@@ -58,8 +64,7 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
     return [this.stats.todo, this.stats.inProgress, this.stats.completed];
   }
 
-  onTaskCreated() {
+  onTaskCreated(): void {
     this.refreshTasks++;
-    this.loadStats();
   }
 }

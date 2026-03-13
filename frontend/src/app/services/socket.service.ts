@@ -1,26 +1,38 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { io, Socket } from 'socket.io-client';
-import { Subject } from 'rxjs';
+import { ReplaySubject } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class SocketService implements OnDestroy {
   private socket: Socket | null = null;
   private readonly SERVER_URL = 'http://localhost:5000';
 
-  taskCreated$ = new Subject<any>();
-  taskUpdated$ = new Subject<any>();
-  taskDeleted$ = new Subject<{ _id: string }>();
+  // ReplaySubject(1) replays the last emission to any late subscriber,
+  // eliminating the race condition where events fired before subscriptions
+  // were set up.
+  taskCreated$ = new ReplaySubject<any>(1);
+  taskUpdated$ = new ReplaySubject<any>(1);
+  taskDeleted$ = new ReplaySubject<{ _id: string }>(1);
 
-  connect() {
-    if (this.socket?.connected) return;
+  /**
+   * Connects to the server. Safe to call multiple times — idempotent.
+   * Guards against both "already connected" and "currently connecting"
+   * states to prevent duplicate socket instances and stacked listeners.
+   */
+  connect(): void {
+    // socket.io sets connected=false while handshaking, so we check for
+    // the socket object's existence, not just the connected boolean.
+    if (this.socket) return;
 
     this.socket = io(this.SERVER_URL, {
       transports: ['websocket', 'polling'],
-      autoConnect: true,
+      reconnection: true,
+      reconnectionAttempts: 5,
+      reconnectionDelay: 1000,
     });
 
     this.socket.on('connect', () => {
-      console.log('Socket connected:', this.socket?.id);
+      console.log('[Socket] Connected:', this.socket?.id);
     });
 
     this.socket.on('taskCreated', (task: any) => {
@@ -35,21 +47,27 @@ export class SocketService implements OnDestroy {
       this.taskDeleted$.next(data);
     });
 
-    this.socket.on('disconnect', () => {
-      console.log('Socket disconnected');
+    this.socket.on('disconnect', (reason) => {
+      console.log('[Socket] Disconnected:', reason);
     });
 
     this.socket.on('connect_error', (err) => {
-      console.warn('Socket connection error:', err.message);
+      console.warn('[Socket] Connection error:', err.message);
     });
   }
 
-  disconnect() {
+  /**
+   * Fully tears down the socket. Only call this when the application
+   * itself is shutting down (ngOnDestroy of the root service).
+   * Do NOT call this in page-level component ngOnDestroy — the service
+   * is a singleton and the socket is shared across all components.
+   */
+  disconnect(): void {
     this.socket?.disconnect();
     this.socket = null;
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.disconnect();
   }
 }
